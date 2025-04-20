@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\PaparaGo.WebAPI.props" />
+</Project>

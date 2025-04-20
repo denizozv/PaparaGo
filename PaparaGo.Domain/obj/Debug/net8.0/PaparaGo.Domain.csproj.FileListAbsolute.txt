@@ -1,0 +1,12 @@
+C:\Users\deniz\source\repos\PaparaGo\PaparaGo.Domain\bin\Debug\net8.0\PaparaGo.Domain.deps.json
+C:\Users\deniz\source\repos\PaparaGo\PaparaGo.Domain\bin\Debug\net8.0\PaparaGo.Domain.dll
+C:\Users\deniz\source\repos\PaparaGo\PaparaGo.Domain\bin\Debug\net8.0\PaparaGo.Domain.pdb
+C:\Users\deniz\source\repos\PaparaGo\PaparaGo.Domain\obj\Debug\net8.0\PaparaGo.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\deniz\source\repos\PaparaGo\PaparaGo.Domain\obj\Debug\net8.0\PaparaGo.Domain.AssemblyInfoInputs.cache
+C:\Users\deniz\source\repos\PaparaGo\PaparaGo.Domain\obj\Debug\net8.0\PaparaGo.Domain.AssemblyInfo.cs
+C:\Users\deniz\source\repos\PaparaGo\PaparaGo.Domain\obj\Debug\net8.0\PaparaGo.Domain.csproj.CoreCompileInputs.cache
+C:\Users\deniz\source\repos\PaparaGo\PaparaGo.Domain\obj\Debug\net8.0\PaparaGo.Domain.sourcelink.json
+C:\Users\deniz\source\repos\PaparaGo\PaparaGo.Domain\obj\Debug\net8.0\PaparaGo.Domain.dll
+C:\Users\deniz\source\repos\PaparaGo\PaparaGo.Domain\obj\Debug\net8.0\refint\PaparaGo.Domain.dll
+C:\Users\deniz\source\repos\PaparaGo\PaparaGo.Domain\obj\Debug\net8.0\PaparaGo.Domain.pdb
+C:\Users\deniz\source\repos\PaparaGo\PaparaGo.Domain\obj\Debug\net8.0\ref\PaparaGo.Domain.dll
