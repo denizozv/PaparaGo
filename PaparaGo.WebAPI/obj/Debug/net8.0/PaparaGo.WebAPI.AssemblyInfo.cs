@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PaparaGo.WebAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+72341c7075dad4aca5a2af9e37390adc0d3c3578")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fd9612a851870e58867b682cc7b1812b915bb17f")]
 [assembly: System.Reflection.AssemblyProductAttribute("PaparaGo.WebAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PaparaGo.WebAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
