@@ -15,6 +15,7 @@ public class ExpenseService : IExpenseService
         _context = context;
     }
 
+
     // post expense
     public async Task CreateAsync(CreateExpenseRequestDto dto, Guid userId)
     {
@@ -38,7 +39,7 @@ public class ExpenseService : IExpenseService
         await _context.SaveChangesAsync();
     }
 
-    
+
     public async Task<IEnumerable<ExpenseRequestResponseDto>> GetMyExpensesAsync(Guid userId)
     {
         return await _context.ExpenseRequests
@@ -53,12 +54,13 @@ public class ExpenseService : IExpenseService
                 Description = e.Description,
                 DocumentPath = e.DocumentPath,
                 RequestDate = e.RequestDate,
-                Status = e.Status.ToString()
+                Status = e.Status.ToString(),
+                RejectionReason = e.RejectionReason
             })
             .ToListAsync();
     }
 
-    
+
     public async Task<IEnumerable<ExpenseRequestResponseDto>> GetPendingRequestsAsync()
     {
         return await _context.ExpenseRequests
@@ -77,5 +79,38 @@ public class ExpenseService : IExpenseService
                 Status = e.Status.ToString()
             })
             .ToListAsync();
+    }
+
+
+    public async Task ApproveAsync(Guid expenseRequestId)
+    {
+        var expense = await _context.ExpenseRequests.FindAsync(expenseRequestId);
+        if (expense is null || expense.Status != ExpenseStatus.Pending)
+            throw new Exception("Talep bulunamadı veya zaten işlem görmüş.");
+
+        expense.Status = ExpenseStatus.Approved;
+
+        var paymentLog = new PaymentLog
+        {
+            Id = Guid.NewGuid(),
+            ExpenseRequestId = expense.Id,
+            PaymentDate = DateTime.UtcNow,
+            Amount = expense.Amount
+        };
+
+        _context.PaymentLogs.Add(paymentLog);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task RejectAsync(Guid expenseRequestId, string reason)
+    {
+        var expense = await _context.ExpenseRequests.FindAsync(expenseRequestId);
+        if (expense is null || expense.Status != ExpenseStatus.Pending)
+            throw new Exception("Talep bulunamadı veya zaten işlem görmüş.");
+
+        expense.Status = ExpenseStatus.Rejected;
+        expense.RejectionReason = reason;
+
+        await _context.SaveChangesAsync();
     }
 }

@@ -9,4 +9,5 @@ public class ExpenseRequestResponseDto
     public string? DocumentPath { get; set; }
     public DateTime RequestDate { get; set; }
     public string Status { get; set; } = string.Empty;
+    public string? RejectionReason { get; set; }
 }
