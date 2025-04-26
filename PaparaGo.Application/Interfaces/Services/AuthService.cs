@@ -7,6 +7,8 @@ using PaparaGo.Infrastructure.Data;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using PaparaGo.Domain.Entities;
+using PaparaGo.DTO;
 
 namespace PaparaGo.Application.Services;
 
@@ -49,4 +51,24 @@ public class AuthService : IAuthService
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
+    public async Task RegisterPersonelAsync(CreatePersonelRequestDto dto)
+    {
+        if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
+            throw new Exception("Bu email adresi zaten kullanılıyor.");
+
+        var user = new User
+        {
+            FirstName = dto.FirstName,
+            LastName = dto.LastName,
+            Email = dto.Email,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+            IBAN = dto.IBAN,
+            Role = UserRole.Personel
+        };
+
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+    }
+
 }

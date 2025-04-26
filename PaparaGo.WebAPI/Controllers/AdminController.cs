@@ -12,11 +12,13 @@ namespace PaparaGo.WebAPI.Controllers
     {
         private readonly ICategoryService _categoryService;
         private readonly IExpenseService _expenseService;
+        private readonly IAuthService _authService;
 
-        public AdminController(ICategoryService categoryService, IExpenseService expenseService)
+        public AdminController(ICategoryService categoryService, IExpenseService expenseService, IAuthService authService)
         {
             _categoryService = categoryService;
             _expenseService = expenseService;
+            _authService = authService;
         }
 
         //soft delete 
@@ -42,7 +44,6 @@ namespace PaparaGo.WebAPI.Controllers
         }
 
         [HttpPost("categories")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryRequestDto dto)
         {
             await _categoryService.CreateAsync(dto);
@@ -50,11 +51,19 @@ namespace PaparaGo.WebAPI.Controllers
         }
 
         [HttpPut("categories/{id}")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateCategory(Guid id, [FromBody] UpdateCategoryRequestDto dto)
         {
             await _categoryService.UpdateAsync(id, dto);
             return Ok("Kategori başarıyla güncellendi.");
         }
+
+        [HttpPost("personels")]
+        public async Task<IActionResult> CreatePersonel([FromBody] CreatePersonelRequestDto dto)
+        {
+            await _authService.RegisterPersonelAsync(dto);
+            return Ok("Personel başarıyla oluşturuldu.");
+        }
+
+
     }
 }
