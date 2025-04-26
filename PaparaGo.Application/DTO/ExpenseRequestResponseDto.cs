@@ -10,4 +10,6 @@ public class ExpenseRequestResponseDto
     public DateTime RequestDate { get; set; }
     public string Status { get; set; } = string.Empty;
     public string? RejectionReason { get; set; }
+    public string UserFullName { get; set; } = string.Empty;
+
 }

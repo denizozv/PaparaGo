@@ -8,7 +8,7 @@ namespace PaparaGo.Infrastructure.Seed
     {
         public static async Task SeedAsync(PaparaGoDbContext context)
         {
-            
+
             await context.Database.MigrateAsync();
 
             // Users
@@ -21,7 +21,7 @@ namespace PaparaGo.Infrastructure.Seed
                         FirstName = "Admin",
                         LastName = "User",
                         Email = "admin@paparago.com",
-                        PasswordHash = "123456", 
+                        PasswordHash = "123456",
                         IBAN = "TR000000000000000000000001",
                         Role = UserRole.Admin
                     },
@@ -32,6 +32,15 @@ namespace PaparaGo.Infrastructure.Seed
                         Email = "ali@paparago.com",
                         PasswordHash = "123456",
                         IBAN = "TR000000000000000000000002",
+                        Role = UserRole.Personel
+                    },
+                                        new()
+                    {
+                        FirstName = "Ayşe",
+                        LastName = "Personel",
+                        Email = "ayse@paparago.com",
+                        PasswordHash = "123456",
+                        IBAN = "TR000000000000000000000003",
                         Role = UserRole.Personel
                     }
                 };

@@ -75,7 +75,8 @@ public class ExpenseService : IExpenseService
                 Description = e.Description,
                 DocumentPath = e.DocumentPath,
                 RequestDate = e.RequestDate,
-                Status = e.Status.ToString()
+                Status = e.Status.ToString(),
+                UserFullName = e.User.FirstName + " " + e.User.LastName
             })
             .ToListAsync();
     }
