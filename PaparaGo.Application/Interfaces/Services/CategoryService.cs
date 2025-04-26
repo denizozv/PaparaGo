@@ -2,6 +2,7 @@ using PaparaGo.Application.Interfaces.Services;
 using PaparaGo.Domain.Entities;
 using PaparaGo.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using PaparaGo.DTO;
 
 namespace PaparaGo.Application.Services;
 
@@ -24,15 +25,26 @@ public class CategoryService : ICategoryService
         return await _context.Categories.FindAsync(id);
     }
 
-    public async Task CreateAsync(Category category)
+    public async Task CreateAsync(CreateCategoryRequestDto dto)
     {
+        var category = new Category
+        {
+            Id = Guid.NewGuid(),
+            Name = dto.Name,
+            IsActive = true
+        };
+
         _context.Categories.Add(category);
         await _context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(Category category)
+    public async Task UpdateAsync(Guid id, UpdateCategoryRequestDto dto)
     {
-        _context.Categories.Update(category);
+        var category = await _context.Categories.FindAsync(id);
+        if (category == null || !category.IsActive)
+            throw new Exception("Kategori bulunamadı.");
+
+        category.Name = dto.Name;
         await _context.SaveChangesAsync();
     }
 
@@ -45,4 +57,18 @@ public class CategoryService : ICategoryService
         category.IsActive = false;
         await _context.SaveChangesAsync();
     }
+
+    public async Task<IEnumerable<CategoryDto>> GetActiveCategoriesAsync()
+    {
+        return await _context.Categories
+            .Where(c => c.IsActive)
+            .OrderBy(c => c.Name)
+            .Select(c => new CategoryDto
+            {
+                Id = c.Id,
+                Name = c.Name
+            })
+            .ToListAsync();
+    }
+
 }

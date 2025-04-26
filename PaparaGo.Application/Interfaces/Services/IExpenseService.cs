@@ -11,4 +11,7 @@ public interface IExpenseService
     //admin
     Task ApproveAsync(Guid expenseRequestId);
     Task RejectAsync(Guid expenseRequestId, string reason);
+    Task<IEnumerable<ExpenseRequestResponseDto>> GetApprovedRequestsAsync();
+    Task<IEnumerable<ExpenseRequestResponseDto>> GetRejectedRequestsAsync();
+
 }

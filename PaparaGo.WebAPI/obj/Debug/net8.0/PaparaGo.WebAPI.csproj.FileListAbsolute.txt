@@ -8,6 +8,8 @@ C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\bin\Debug\net8.0\PaparaGo.W
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\bin\Debug\net8.0\AutoMapper.dll
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\bin\Debug\net8.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\bin\Debug\net8.0\FluentValidation.dll
+C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\bin\Debug\net8.0\FluentValidation.AspNetCore.dll
+C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\bin\Debug\net8.0\FluentValidation.DependencyInjectionExtensions.dll
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\bin\Debug\net8.0\Humanizer.dll
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\bin\Debug\net8.0\MediatR.dll
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\bin\Debug\net8.0\MediatR.Contracts.dll

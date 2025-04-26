@@ -42,4 +42,30 @@ public class ExpenseController : ControllerBase
         return Ok(expenses);
     }
 
+    [HttpGet("expenses/pending")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetPendingExpenses()
+    {
+        var pendingExpenses = await _expenseService.GetPendingRequestsAsync();
+        return Ok(pendingExpenses);
+    }
+
+    [HttpGet("expenses/approved")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetApprovedExpenses()
+    {
+        var approvedExpenses = await _expenseService.GetApprovedRequestsAsync();
+        return Ok(approvedExpenses);
+    }
+
+
+    [HttpGet("expenses/rejected")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetRejectedExpenses()
+    {
+        var rejectedExpenses = await _expenseService.GetRejectedRequestsAsync();
+        return Ok(rejectedExpenses);
+    }
+
+
 }

@@ -40,5 +40,21 @@ namespace PaparaGo.WebAPI.Controllers
             await _expenseService.RejectAsync(dto.ExpenseRequestId, dto.RejectionReason);
             return Ok("Masraf talebi reddedildi.");
         }
+
+        [HttpPost("categories")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryRequestDto dto)
+        {
+            await _categoryService.CreateAsync(dto);
+            return Ok("Kategori başarıyla oluşturuldu.");
+        }
+
+        [HttpPut("categories/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateCategory(Guid id, [FromBody] UpdateCategoryRequestDto dto)
+        {
+            await _categoryService.UpdateAsync(id, dto);
+            return Ok("Kategori başarıyla güncellendi.");
+        }
     }
 }

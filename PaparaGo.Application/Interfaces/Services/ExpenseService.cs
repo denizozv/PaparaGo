@@ -113,4 +113,48 @@ public class ExpenseService : IExpenseService
 
         await _context.SaveChangesAsync();
     }
+
+    public async Task<IEnumerable<ExpenseRequestResponseDto>> GetApprovedRequestsAsync()
+    {
+        return await _context.ExpenseRequests
+            .Include(e => e.Category)
+            .Include(e => e.User)
+            .Where(e => e.Status == ExpenseStatus.Approved)
+            .OrderByDescending(e => e.RequestDate)
+            .Select(e => new ExpenseRequestResponseDto
+            {
+                Id = e.Id,
+                CategoryName = e.Category.Name,
+                Amount = e.Amount,
+                Description = e.Description,
+                DocumentPath = e.DocumentPath,
+                RequestDate = e.RequestDate,
+                Status = e.Status.ToString(),
+                RejectionReason = e.RejectionReason
+            })
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<ExpenseRequestResponseDto>> GetRejectedRequestsAsync()
+    {
+        return await _context.ExpenseRequests
+            .Include(e => e.Category)
+            .Include(e => e.User)
+            .Where(e => e.Status == ExpenseStatus.Rejected)
+            .OrderByDescending(e => e.RequestDate)
+            .Select(e => new ExpenseRequestResponseDto
+            {
+                Id = e.Id,
+                CategoryName = e.Category.Name,
+                Amount = e.Amount,
+                Description = e.Description,
+                DocumentPath = e.DocumentPath,
+                RequestDate = e.RequestDate,
+                Status = e.Status.ToString(),
+                RejectionReason = e.RejectionReason
+            })
+            .ToListAsync();
+    }
+
+
 }

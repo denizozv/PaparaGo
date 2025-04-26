@@ -6,6 +6,9 @@ using PaparaGo.Infrastructure.Data;
 using PaparaGo.Infrastructure.Seed;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using FluentValidation.AspNetCore;
+using FluentValidation;
+using PaparaGo.Application.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +51,11 @@ builder.Services.AddAuthentication(options =>
 // Controller & Swagger
 // -----------------------------
 builder.Services.AddControllers();
+builder.Services.AddFluentValidationAutoValidation(); // Validation 
+builder.Services.AddValidatorsFromAssemblyContaining<CreateExpenseRequestDtoValidator>(); // All Validators
+builder.Services.AddValidatorsFromAssemblyContaining<ApproveExpenseRequestDtoValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<RejectExpenseRequestDtoValidator>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
