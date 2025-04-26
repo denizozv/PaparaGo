@@ -82,6 +82,10 @@ public class ExpenseService : IExpenseService
 
     // Admin: expense accept
     public async Task ApproveAsync(Guid expenseRequestId)
+{
+    using var transaction = await _context.Database.BeginTransactionAsync(); //negin transaction
+
+    try
     {
         var expense = await _context.ExpenseRequests.FindAsync(expenseRequestId);
         if (expense is null || expense.Status != ExpenseStatus.Pending)
@@ -92,9 +96,11 @@ public class ExpenseService : IExpenseService
             throw new Exception("Kullanıcı bulunamadı.");
 
         expense.Status = ExpenseStatus.Approved;
+
         
         user.Balance += expense.Amount;
 
+         
         var paymentLog = new PaymentLog
         {
             Id = Guid.NewGuid(),
@@ -105,8 +111,17 @@ public class ExpenseService : IExpenseService
 
         _context.PaymentLogs.Add(paymentLog);
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(); 
+
+        await transaction.CommitAsync();   
     }
+    catch
+    {
+        await transaction.RollbackAsync(); // rollback
+        throw; 
+    }
+}
+
 
 
     // Admin: rejection

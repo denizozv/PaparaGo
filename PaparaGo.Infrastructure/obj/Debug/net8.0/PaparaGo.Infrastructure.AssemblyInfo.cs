@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PaparaGo.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+118c3d6731d3ccdba6ecca40d6a8e4576ae36f86")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b77fae456746ba5298a5e2c7bef73e721cb50c2d")]
 [assembly: System.Reflection.AssemblyProductAttribute("PaparaGo.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PaparaGo.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
