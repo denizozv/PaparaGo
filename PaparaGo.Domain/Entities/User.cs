@@ -23,6 +23,7 @@ public class User
     public UserRole Role { get; set; }
 
     public bool IsActive { get; set; } = true;
+    public decimal Balance { get; set; } = 0;
 
     // Navigation Property
     public ICollection<ExpenseRequest> ExpenseRequests { get; set; } = new List<ExpenseRequest>();

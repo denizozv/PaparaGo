@@ -87,7 +87,13 @@ public class ExpenseService : IExpenseService
         if (expense is null || expense.Status != ExpenseStatus.Pending)
             throw new Exception("Talep bulunamadı veya zaten işlem görmüş.");
 
+        var user = await _context.Users.FindAsync(expense.UserId);
+        if (user is null || !user.IsActive)
+            throw new Exception("Kullanıcı bulunamadı.");
+
         expense.Status = ExpenseStatus.Approved;
+        
+        user.Balance += expense.Amount;
 
         var paymentLog = new PaymentLog
         {
@@ -98,8 +104,10 @@ public class ExpenseService : IExpenseService
         };
 
         _context.PaymentLogs.Add(paymentLog);
+
         await _context.SaveChangesAsync();
     }
+
 
     // Admin: rejection
     public async Task RejectAsync(Guid expenseRequestId, string reason)

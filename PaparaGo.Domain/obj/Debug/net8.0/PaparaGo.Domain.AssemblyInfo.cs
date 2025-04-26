@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PaparaGo.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+32ab1e71c3a7bb71c304064d307d3846adb890d3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+118c3d6731d3ccdba6ecca40d6a8e4576ae36f86")]
 [assembly: System.Reflection.AssemblyProductAttribute("PaparaGo.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PaparaGo.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

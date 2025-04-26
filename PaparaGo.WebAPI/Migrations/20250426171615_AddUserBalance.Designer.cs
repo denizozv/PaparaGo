@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PaparaGo.Infrastructure.Data;
@@ -11,9 +12,11 @@ using PaparaGo.Infrastructure.Data;
 namespace PaparaGo.WebAPI.Migrations
 {
     [DbContext(typeof(PaparaGoDbContext))]
-    partial class PaparaGoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250426171615_AddUserBalance")]
+    partial class AddUserBalance
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
