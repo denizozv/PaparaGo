@@ -15,12 +15,11 @@ public class ExpenseService : IExpenseService
         _context = context;
     }
 
-
-    // post expense
+    // Post Expense
     public async Task CreateAsync(CreateExpenseRequestDto dto, Guid userId)
     {
         var category = await _context.Categories.FindAsync(dto.CategoryId);
-        if (category is null || !category.IsActive)
+        if (category is null || category.DeletedAt != null)
             throw new Exception("Geçersiz kategori.");
 
         var expense = new ExpenseRequest
@@ -39,12 +38,12 @@ public class ExpenseService : IExpenseService
         await _context.SaveChangesAsync();
     }
 
-
+    // users own expens
     public async Task<IEnumerable<ExpenseRequestResponseDto>> GetMyExpensesAsync(Guid userId)
     {
         return await _context.ExpenseRequests
             .Include(e => e.Category)
-            .Where(e => e.UserId == userId)
+            .Where(e => e.UserId == userId && e.Category.DeletedAt == null)
             .OrderByDescending(e => e.RequestDate)
             .Select(e => new ExpenseRequestResponseDto
             {
@@ -60,13 +59,13 @@ public class ExpenseService : IExpenseService
             .ToListAsync();
     }
 
-
+    // Admin: pending
     public async Task<IEnumerable<ExpenseRequestResponseDto>> GetPendingRequestsAsync()
     {
         return await _context.ExpenseRequests
             .Include(e => e.User)
             .Include(e => e.Category)
-            .Where(e => e.Status == ExpenseStatus.Pending)
+            .Where(e => e.Status == ExpenseStatus.Pending && e.Category.DeletedAt == null)
             .OrderBy(e => e.RequestDate)
             .Select(e => new ExpenseRequestResponseDto
             {
@@ -81,7 +80,7 @@ public class ExpenseService : IExpenseService
             .ToListAsync();
     }
 
-
+    // Admin: expense accept
     public async Task ApproveAsync(Guid expenseRequestId)
     {
         var expense = await _context.ExpenseRequests.FindAsync(expenseRequestId);
@@ -102,6 +101,7 @@ public class ExpenseService : IExpenseService
         await _context.SaveChangesAsync();
     }
 
+    // Admin: rejection
     public async Task RejectAsync(Guid expenseRequestId, string reason)
     {
         var expense = await _context.ExpenseRequests.FindAsync(expenseRequestId);
@@ -114,12 +114,13 @@ public class ExpenseService : IExpenseService
         await _context.SaveChangesAsync();
     }
 
+    // Admin: get accepted
     public async Task<IEnumerable<ExpenseRequestResponseDto>> GetApprovedRequestsAsync()
     {
         return await _context.ExpenseRequests
             .Include(e => e.Category)
             .Include(e => e.User)
-            .Where(e => e.Status == ExpenseStatus.Approved)
+            .Where(e => e.Status == ExpenseStatus.Approved && e.Category.DeletedAt == null)
             .OrderByDescending(e => e.RequestDate)
             .Select(e => new ExpenseRequestResponseDto
             {
@@ -135,12 +136,13 @@ public class ExpenseService : IExpenseService
             .ToListAsync();
     }
 
+    // Admin: get rejection
     public async Task<IEnumerable<ExpenseRequestResponseDto>> GetRejectedRequestsAsync()
     {
         return await _context.ExpenseRequests
             .Include(e => e.Category)
             .Include(e => e.User)
-            .Where(e => e.Status == ExpenseStatus.Rejected)
+            .Where(e => e.Status == ExpenseStatus.Rejected && e.Category.DeletedAt == null)
             .OrderByDescending(e => e.RequestDate)
             .Select(e => new ExpenseRequestResponseDto
             {
@@ -155,6 +157,4 @@ public class ExpenseService : IExpenseService
             })
             .ToListAsync();
     }
-
-
 }

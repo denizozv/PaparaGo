@@ -10,7 +10,7 @@ public class Category
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    public bool IsActive { get; set; } = true;
+     public DateTime? DeletedAt { get; set; }
 
     // Navigation Property
     public ICollection<ExpenseRequest> ExpenseRequests { get; set; } = new List<ExpenseRequest>();

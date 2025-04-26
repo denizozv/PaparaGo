@@ -36,7 +36,8 @@ namespace PaparaGo.Infrastructure.Data
 
             // Soft delete 
             modelBuilder.Entity<User>().HasQueryFilter(u => u.IsActive);
-            modelBuilder.Entity<Category>().HasQueryFilter(c => c.IsActive);
+            modelBuilder.Entity<Category>().HasQueryFilter(c => c.DeletedAt == null);
+
         }
     }
 }

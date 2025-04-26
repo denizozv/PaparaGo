@@ -31,7 +31,7 @@ public class CategoryService : ICategoryService
         {
             Id = Guid.NewGuid(),
             Name = dto.Name,
-            IsActive = true
+            DeletedAt = null 
         };
 
         _context.Categories.Add(category);
@@ -41,8 +41,8 @@ public class CategoryService : ICategoryService
     public async Task UpdateAsync(Guid id, UpdateCategoryRequestDto dto)
     {
         var category = await _context.Categories.FindAsync(id);
-        if (category == null || !category.IsActive)
-            throw new Exception("Kategori bulunamadı.");
+        if (category == null || category.DeletedAt != null)
+            throw new Exception("Kategori bulunamadı veya pasif durumda.");
 
         category.Name = dto.Name;
         await _context.SaveChangesAsync();
@@ -51,17 +51,24 @@ public class CategoryService : ICategoryService
     public async Task SoftDeleteAsync(Guid id)
     {
         var category = await _context.Categories.FindAsync(id);
-        if (category is null)
-            throw new Exception("Kategori bulunamadı");
+        if (category == null || category.DeletedAt != null)
+            throw new Exception("Kategori bulunamadı veya zaten silinmiş.");
 
-        category.IsActive = false;
+        // is there any expense pending
+        bool hasActiveExpenses = await _context.ExpenseRequests
+            .AnyAsync(e => e.CategoryId == id && e.Status == ExpenseStatus.Pending);
+
+        if (hasActiveExpenses)
+            throw new Exception("Bu kategoriye ait bekleyen masraf talepleri bulunduğu için silinemez.");
+
+        category.DeletedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
     }
 
     public async Task<IEnumerable<CategoryDto>> GetActiveCategoriesAsync()
     {
         return await _context.Categories
-            .Where(c => c.IsActive)
+            .Where(c => c.DeletedAt == null) // If DeletedAt null category is active
             .OrderBy(c => c.Name)
             .Select(c => new CategoryDto
             {
@@ -70,5 +77,4 @@ public class CategoryService : ICategoryService
             })
             .ToListAsync();
     }
-
 }

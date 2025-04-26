@@ -13,10 +13,15 @@ using PaparaGo.Application.Validators;
 var builder = WebApplication.CreateBuilder(args);
 
 // -----------------------------
-// PostgreSQL Bağlantısı
+// PostgreSQL 
 // -----------------------------
 builder.Services.AddDbContext<PaparaGoDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        x => x.MigrationsAssembly("PaparaGo.WebAPI")
+    )
+);
+
 
 // -----------------------------
 // Dependency Injection (Service Layer)
