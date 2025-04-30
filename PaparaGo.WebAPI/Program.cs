@@ -57,7 +57,7 @@ builder.Services.AddAuthentication(options =>
 // -----------------------------
 builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation(); // Validation 
-builder.Services.AddValidatorsFromAssemblyContaining<CreateExpenseRequestDtoValidator>(); // All Validators
+builder.Services.AddValidatorsFromAssemblyContaining<CreateExpenseRequestDtoValidator>(); 
 builder.Services.AddValidatorsFromAssemblyContaining<ApproveExpenseRequestDtoValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<RejectExpenseRequestDtoValidator>();
 

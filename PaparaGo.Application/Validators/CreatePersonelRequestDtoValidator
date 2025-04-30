@@ -1,0 +1,31 @@
+using FluentValidation;
+using PaparaGo.DTO;
+
+namespace PaparaGo.Application.Validators
+{
+    public class CreatePersonelRequestDtoValidator : AbstractValidator<CreatePersonelRequestDto>
+    {
+        public CreatePersonelRequestDtoValidator()
+        {
+            RuleFor(x => x.FirstName)
+                .NotEmpty().WithMessage("Ad boş olamaz.")
+                .MinimumLength(2).WithMessage("Ad en az 2 karakter olmalıdır.");
+
+            RuleFor(x => x.LastName)
+                .NotEmpty().WithMessage("Soyad boş olamaz.")
+                .MinimumLength(2).WithMessage("Soyad en az 2 karakter olmalıdır.");
+
+            RuleFor(x => x.Email)
+                .NotEmpty().WithMessage("E-posta boş olamaz.")
+                .EmailAddress().WithMessage("Geçerli bir e-posta adresi giriniz.");
+
+            RuleFor(x => x.Password)
+                .NotEmpty().WithMessage("Şifre boş olamaz.")
+                .MinimumLength(6).WithMessage("Şifre en az 6 karakter olmalıdır.");
+
+            RuleFor(x => x.IBAN)
+                .NotEmpty().WithMessage("IBAN boş olamaz.")
+                .Matches(@"^TR\d{24}$").WithMessage("IBAN formatı geçersizdir.");
+        }
+    }
+}
