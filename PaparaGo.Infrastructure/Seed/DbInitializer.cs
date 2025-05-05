@@ -15,7 +15,7 @@ public static class DbInitializer
 
         var viewCommands = new List<string>
         {
-            // Şirket Bazlı Haftalık Rapor View
+            // Şirket Bazlı Haftalık Rapor
             """
             CREATE OR REPLACE VIEW vw_company_weekly_expense_summary AS
             SELECT 
@@ -29,7 +29,7 @@ public static class DbInitializer
             ORDER BY "Week" DESC;
             """,
 
-            // Şirket Bazlı Aylık Rapor View
+            // Şirket Bazlı Aylık Rapor
             """
             CREATE OR REPLACE VIEW vw_company_monthly_expense_summary AS
             SELECT 
@@ -43,7 +43,7 @@ public static class DbInitializer
             ORDER BY "Month" DESC;
             """,
 
-            // Şirket Bazlı Günlük Rapor View
+            // Şirket Bazlı Günlük Rapor
             """
             CREATE OR REPLACE VIEW vw_company_daily_expense_summary AS
             SELECT 
@@ -55,6 +55,57 @@ public static class DbInitializer
             FROM "ExpenseRequests"
             GROUP BY 1
             ORDER BY "Date" DESC;
+            """,
+
+            // Personel Bazlı Günlük Rapor
+            """
+            CREATE OR REPLACE VIEW vw_personal_daily_expense_summary AS
+            SELECT 
+                e."UserId",
+                u."FirstName" || ' ' || u."LastName" AS "UserFullName",
+                DATE(e."RequestDate") AS "Date",
+                COUNT(*) AS "ExpenseCount",
+                SUM(e."Amount") AS "TotalAmount",
+                COUNT(CASE WHEN e."Status" = 1 THEN 1 END) AS "ApprovedCount",
+                COUNT(CASE WHEN e."Status" = 2 THEN 1 END) AS "RejectedCount"
+            FROM "ExpenseRequests" e
+            JOIN "Users" u ON e."UserId" = u."Id"
+            GROUP BY 1, 2, 3
+            ORDER BY "Date" DESC;
+            """,
+
+            // Personel Bazlı Haftalık Rapor
+            """
+            CREATE OR REPLACE VIEW vw_personal_weekly_expense_summary AS
+            SELECT 
+                e."UserId",
+                u."FirstName" || ' ' || u."LastName" AS "UserFullName",
+                DATE_TRUNC('week', e."RequestDate") AS "Week",
+                COUNT(*) AS "ExpenseCount",
+                SUM(e."Amount") AS "TotalAmount",
+                COUNT(CASE WHEN e."Status" = 1 THEN 1 END) AS "ApprovedCount",
+                COUNT(CASE WHEN e."Status" = 2 THEN 1 END) AS "RejectedCount"
+            FROM "ExpenseRequests" e
+            JOIN "Users" u ON e."UserId" = u."Id"
+            GROUP BY 1, 2, 3
+            ORDER BY "Week" DESC;
+            """,
+
+            // Personel Bazlı Aylık Rapor
+            """
+            CREATE OR REPLACE VIEW vw_personal_monthly_expense_summary AS
+            SELECT 
+                e."UserId",
+                u."FirstName" || ' ' || u."LastName" AS "UserFullName",
+                TO_CHAR(e."RequestDate", 'YYYY-MM') AS "Month",
+                COUNT(*) AS "ExpenseCount",
+                SUM(e."Amount") AS "TotalAmount",
+                COUNT(CASE WHEN e."Status" = 1 THEN 1 END) AS "ApprovedCount",
+                COUNT(CASE WHEN e."Status" = 2 THEN 1 END) AS "RejectedCount"
+            FROM "ExpenseRequests" e
+            JOIN "Users" u ON e."UserId" = u."Id"
+            GROUP BY 1, 2, 3
+            ORDER BY "Month" DESC;
             """,
 
             // Kategori Dağılımı
@@ -106,7 +157,7 @@ public static class DbInitializer
 
         await conn.CloseAsync();
 
-        // Varsayılan kullanıcılar
+        // Varsayılan Kullanıcılar
         if (!context.Users.Any())
         {
             var users = new List<User>
@@ -119,7 +170,7 @@ public static class DbInitializer
             context.Users.AddRange(users);
         }
 
-        // Varsayılan kategoriler
+        // Varsayılan Kategoriler
         if (!context.Categories.Any())
         {
             var categories = new List<Category>

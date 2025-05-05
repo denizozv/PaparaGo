@@ -39,6 +39,30 @@ public class ReportService : IReportService
         return (await connection.QueryAsync<CompanyMonthlyExpenseSummaryDto>(sql)).ToList();
     }
 
+    // Personel günlük raporu
+    public async Task<IEnumerable<PersonalDailyExpenseSummaryDto>> GetPersonalDailyExpensesAsync(Guid userId)
+    {
+        const string sql = "SELECT * FROM vw_personal_daily_expense_summary WHERE \"UserId\" = @UserId";
+        using var connection = GetConnection();
+        return (await connection.QueryAsync<PersonalDailyExpenseSummaryDto>(sql, new { UserId = userId })).ToList();
+    }
+
+    // Personel haftalık raporu
+    public async Task<IEnumerable<PersonalWeeklyExpenseSummaryDto>> GetPersonalWeeklyExpensesAsync(Guid userId)
+    {
+        const string sql = "SELECT * FROM vw_personal_weekly_expense_summary WHERE \"UserId\" = @UserId";
+        using var connection = GetConnection();
+        return (await connection.QueryAsync<PersonalWeeklyExpenseSummaryDto>(sql, new { UserId = userId })).ToList();
+    }
+
+    // Personel aylık raporu
+    public async Task<IEnumerable<PersonalMonthlyExpenseSummaryDto>> GetPersonalMonthlyExpensesAsync(Guid userId)
+    {
+        const string sql = "SELECT * FROM vw_personal_monthly_expense_summary WHERE \"UserId\" = @UserId";
+        using var connection = GetConnection();
+        return (await connection.QueryAsync<PersonalMonthlyExpenseSummaryDto>(sql, new { UserId = userId })).ToList();
+    }
+
     public async Task<IEnumerable<CategoryDistributionDto>> GetCategoryDistributionAsync()
     {
         const string sql = "SELECT * FROM vw_categorydistribution";
