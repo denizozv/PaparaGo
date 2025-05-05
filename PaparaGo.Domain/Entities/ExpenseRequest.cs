@@ -19,7 +19,7 @@ public class ExpenseRequest
 
     public string Description { get; set; } = string.Empty;
 
-    public string? DocumentPath { get; set; } // Fiş/fatura dosya yolu
+    public string? DocumentPath { get; set; } // recipt
 
     public DateTime RequestDate { get; set; } = DateTime.UtcNow;
 

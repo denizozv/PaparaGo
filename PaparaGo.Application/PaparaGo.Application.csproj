@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\PaparaGo.Domain\PaparaGo.Domain.csproj" />
     <ProjectReference Include="..\PaparaGo.Infrastructure\PaparaGo.Infrastructure.csproj" />
+    <ProjectReference Include="..\PaparaGo.DTO\PaparaGo.DTO.csproj" />
   </ItemGroup>
 
   <ItemGroup>

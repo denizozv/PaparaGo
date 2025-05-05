@@ -1,5 +1,6 @@
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\bin\Debug\net8.0\appsettings.json
+C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\bin\Debug\net8.0\PaparaGo.WebAPI.staticwebassets.endpoints.json
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\bin\Debug\net8.0\PaparaGo.WebAPI.exe
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\bin\Debug\net8.0\PaparaGo.WebAPI.deps.json
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\bin\Debug\net8.0\PaparaGo.WebAPI.runtimeconfig.json
@@ -150,14 +151,16 @@ C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\obj\Debug\net8.0\PaparaGo.W
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\obj\Debug\net8.0\PaparaGo.WebAPI.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\obj\Debug\net8.0\PaparaGo.WebAPI.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\obj\Debug\net8.0\PaparaGo.WebAPI.sourcelink.json
+C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\obj\Debug\net8.0\scopedcss\bundle\PaparaGo.WebAPI.styles.css
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\obj\Debug\net8.0\staticwebassets.development.json
+C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\obj\Debug\net8.0\staticwebassets.build.endpoints.json
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\obj\Debug\net8.0\staticwebassets\msbuild.PaparaGo.WebAPI.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\obj\Debug\net8.0\staticwebassets\msbuild.PaparaGo.WebAPI.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\obj\Debug\net8.0\staticwebassets\msbuild.build.PaparaGo.WebAPI.props
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.PaparaGo.WebAPI.props
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.PaparaGo.WebAPI.props
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\obj\Debug\net8.0\staticwebassets.pack.json
-C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\obj\Debug\net8.0\scopedcss\bundle\PaparaGo.WebAPI.styles.css
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\obj\Debug\net8.0\PaparaGo.C7438836.Up2Date
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\obj\Debug\net8.0\PaparaGo.WebAPI.dll
 C:\Users\deniz\source\repos\PaparaGo\PaparaGo.WebAPI\obj\Debug\net8.0\refint\PaparaGo.WebAPI.dll

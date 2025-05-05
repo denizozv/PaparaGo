@@ -1,11 +1,12 @@
 {
   "Version": 1,
-  "Hash": "XNPJUZumdPhUWAuCTnCjIKZEoIAs4iQ3jl+0l4vE+pw=",
+  "Hash": "SK0nHEbNqt1tsjDgItNnz1a2Og8fB0ymjVeAj1m/MlM=",
   "Source": "PaparaGo.WebAPI",
   "BasePath": "_content/PaparaGo.WebAPI",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [],
+  "Endpoints": []
 }
