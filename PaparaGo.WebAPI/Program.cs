@@ -29,6 +29,7 @@ builder.Services.AddDbContext<PaparaGoDbContext>(options =>
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
+builder.Services.AddScoped<IReportService, ReportService>();
 // -----------------------------
 // JWT Authentication
 // -----------------------------

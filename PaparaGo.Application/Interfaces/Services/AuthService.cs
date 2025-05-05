@@ -71,4 +71,18 @@ public class AuthService : IAuthService
         await _context.SaveChangesAsync();
     }
 
+    public async Task ChangePasswordAsync(Guid userId, string oldPassword, string newPassword)
+    {
+        var user = await _context.Users.FindAsync(userId);
+        if (user == null)
+            throw new Exception("Kullanıcı bulunamadı.");
+
+        if (!BCrypt.Net.BCrypt.Verify(oldPassword, user.PasswordHash))
+            throw new Exception("Eski şifre yanlış.");
+
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(newPassword);
+        await _context.SaveChangesAsync();
+    }
+
+
 }

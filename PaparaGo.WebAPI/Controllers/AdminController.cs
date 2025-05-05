@@ -14,11 +14,14 @@ namespace PaparaGo.WebAPI.Controllers
         private readonly IExpenseService _expenseService;
         private readonly IAuthService _authService;
 
-        public AdminController(ICategoryService categoryService, IExpenseService expenseService, IAuthService authService)
+        private readonly IReportService _reportService;
+
+        public AdminController(ICategoryService categoryService, IExpenseService expenseService, IAuthService authService, IReportService reportService)
         {
             _categoryService = categoryService;
             _expenseService = expenseService;
             _authService = authService;
+            _reportService = reportService;
         }
 
         //soft delete 
@@ -63,6 +66,13 @@ namespace PaparaGo.WebAPI.Controllers
             await _authService.RegisterPersonelAsync(dto);
             return Ok("Personel başarıyla oluşturuldu.");
         }
+        [HttpGet("reports/weekly-expenses")]
+        public async Task<IActionResult> GetWeeklyExpenses()
+        {
+            var report = await _reportService.GetWeeklyExpenseSummaryAsync();
+            return Ok(report);
+        }
+
 
 
     }
