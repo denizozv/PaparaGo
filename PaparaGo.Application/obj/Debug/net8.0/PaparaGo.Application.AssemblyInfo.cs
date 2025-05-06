@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PaparaGo.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+347c00ea9f2f11140edf6478e38c88aef65c3c56")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c33ac2ddf760a916e0f4059d229a17bf8cc3dd37")]
 [assembly: System.Reflection.AssemblyProductAttribute("PaparaGo.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PaparaGo.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
