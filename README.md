@@ -24,7 +24,7 @@ Bu uygulama ile:
 
 ### 1. Veritabanı
 
-[🔗NEON](https://neon.tech/){:target="_blank"} PostgreSQL
+[🔗NEON](https://neon.tech/) PostgreSQL
 
 ## 🧪 Test / Dokümantasyon
 - Swagger üzerinde tüm uçtan uca senaryolar test edilebilir.
