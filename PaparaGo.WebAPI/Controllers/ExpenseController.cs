@@ -11,10 +11,12 @@ namespace PaparaGo.WebAPI.Controllers;
 public class ExpenseController : ControllerBase
 {
     private readonly IExpenseService _expenseService;
+    private readonly IReportService _reportService;
 
-    public ExpenseController(IExpenseService expenseService)
+    public ExpenseController(IExpenseService expenseService, IReportService reportService)
     {
         _expenseService = expenseService;
+        _reportService = reportService;
     }
 
     //make expense 
@@ -66,6 +68,56 @@ public class ExpenseController : ControllerBase
         var rejectedExpenses = await _expenseService.GetRejectedRequestsAsync();
         return Ok(rejectedExpenses);
     }
+
+    [HttpGet("personel/daily")]
+    [Authorize(Roles = "Personel")]
+    public async Task<IActionResult> GetDailyExpenses()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId is null)
+            return Unauthorized("Token geçersiz.");
+
+        var all = await _reportService.GetPersonalDailyExpensesAsync(Guid.Parse(userId));
+        var today = DateTime.Today;
+        var filtered = all.Where(x => x.Date.Date == today).ToList();
+        return Ok(filtered);
+    }
+
+    [HttpGet("personel/weekly")]
+    [Authorize(Roles = "Personel")]
+    public async Task<IActionResult> GetWeeklyExpenses()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId is null)
+            return Unauthorized("Token geçersiz.");
+
+        var all = await _reportService.GetPersonalWeeklyExpensesAsync(Guid.Parse(userId));
+        
+        var sevenDaysAgo = DateTime.Today.Subtract(TimeSpan.FromDays(7));
+
+        var filtered = all.Where(x => x.Date >= sevenDaysAgo && x.Date < DateTime.Today).ToList();
+
+        return Ok(filtered);
+    }
+
+    [HttpGet("personel/monthly")]
+    [Authorize(Roles = "Personel")]
+    public async Task<IActionResult> GetMonthlyExpenses()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId is null)
+            return Unauthorized("Token geçersiz.");
+
+        var all = await _reportService.GetPersonalMonthlyExpensesAsync(Guid.Parse(userId));
+        var today = DateTime.Today;
+        var firstOfMonth = new DateTime(today.Year, today.Month, 1);
+        var firstOfNextMonth = firstOfMonth.AddMonths(1);
+
+        var filtered = all.Where(x => x.Date >= firstOfMonth && x.Date < firstOfNextMonth).ToList();
+        return Ok(filtered);
+    }
+
+
 
 
 }
