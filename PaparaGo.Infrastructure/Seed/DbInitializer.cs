@@ -13,11 +13,32 @@ public static class DbInitializer
         var conn = context.Database.GetDbConnection();
         await conn.OpenAsync();
 
+        // First, drop any existing views to avoid conflicts
+        var dropViewCommands = new List<string>
+        {
+            "DROP VIEW IF EXISTS vw_company_weekly_expense_summary;",
+            "DROP VIEW IF EXISTS vw_company_monthly_expense_summary;",
+            "DROP VIEW IF EXISTS vw_company_daily_expense_summary;",
+            "DROP VIEW IF EXISTS vw_personal_weekly_expense_summary;",
+            "DROP VIEW IF EXISTS vw_personal_daily_expense_summary;",
+            "DROP VIEW IF EXISTS vw_personal_monthly_expense_summary;",
+            "DROP VIEW IF EXISTS vw_categorydistribution;",
+            "DROP VIEW IF EXISTS vw_topspenders;",
+            "DROP VIEW IF EXISTS vw_dailyaverageexpense;"
+        };
+
+        foreach (var sql in dropViewCommands)
+        {
+            var cmd = conn.CreateCommand();
+            cmd.CommandText = sql;
+            await cmd.ExecuteNonQueryAsync();
+        }
+
         var viewCommands = new List<string>
         {
             // Şirket Bazlı Haftalık Rapor
             """
-            CREATE OR REPLACE VIEW vw_company_weekly_expense_summary AS
+            CREATE VIEW vw_company_weekly_expense_summary AS
             SELECT 
                 DATE_TRUNC('week', "RequestDate") AS "Week",
                 COUNT(*) AS "ExpenseCount",
@@ -31,7 +52,7 @@ public static class DbInitializer
 
             // Şirket Bazlı Aylık Rapor
             """
-            CREATE OR REPLACE VIEW vw_company_monthly_expense_summary AS
+            CREATE VIEW vw_company_monthly_expense_summary AS
             SELECT 
                 TO_CHAR("RequestDate", 'YYYY-MM') AS "Month",
                 COUNT(*) AS "ExpenseCount",
@@ -45,9 +66,9 @@ public static class DbInitializer
 
             // Şirket Bazlı Günlük Rapor
             """
-            CREATE OR REPLACE VIEW vw_company_daily_expense_summary AS
+            CREATE VIEW vw_company_daily_expense_summary AS
             SELECT 
-                DATE("RequestDate") AS "Date",
+                COALESCE(DATE("RequestDate"), CURRENT_DATE) AS "Date",
                 COUNT(*) AS "ExpenseCount",
                 SUM("Amount") AS "TotalAmount",
                 COUNT(CASE WHEN "Status" = 1 THEN 1 END) AS "ApprovedCount",
@@ -57,60 +78,68 @@ public static class DbInitializer
             ORDER BY "Date" DESC;
             """,
 
-            // Personel Bazlı Günlük Rapor
+              // Personel Bazlı Günlük Rapor
             """
-            CREATE OR REPLACE VIEW vw_personal_daily_expense_summary AS
+            CREATE VIEW vw_personal_daily_expense_summary AS
             SELECT 
-                e."UserId",
-                u."FirstName" || ' ' || u."LastName" AS "UserFullName",
-                DATE(e."RequestDate") AS "Date",
-                COUNT(*) AS "ExpenseCount",
-                SUM(e."Amount") AS "TotalAmount",
+                u."Id" AS "UserId",
+                (u."FirstName" || ' ' || u."LastName") AS "UserFullName",
+                COALESCE(DATE(e."RequestDate"), CURRENT_DATE) AS "Date",
+                COUNT(e."Id") AS "ExpenseCount",
+                COALESCE(SUM(e."Amount"), 0) AS "TotalAmount",
                 COUNT(CASE WHEN e."Status" = 1 THEN 1 END) AS "ApprovedCount",
                 COUNT(CASE WHEN e."Status" = 2 THEN 1 END) AS "RejectedCount"
-            FROM "ExpenseRequests" e
-            JOIN "Users" u ON e."UserId" = u."Id"
-            GROUP BY 1, 2, 3
-            ORDER BY "Date" DESC;
+            FROM 
+                "Users" u
+            JOIN 
+                "ExpenseRequests" e ON u."Id" = e."UserId"
+            GROUP BY
+                u."Id", u."FirstName", u."LastName", COALESCE(DATE(e."RequestDate"), CURRENT_DATE)
+            ORDER BY 
+                "Date" DESC, "TotalAmount" DESC;
             """,
 
             // Personel Bazlı Haftalık Rapor
             """
-            CREATE OR REPLACE VIEW vw_personal_weekly_expense_summary AS
-            SELECT 
-                e."UserId",
-                u."FirstName" || ' ' || u."LastName" AS "UserFullName",
-                DATE_TRUNC('week', e."RequestDate") AS "Week",
-                COUNT(*) AS "ExpenseCount",
-                SUM(e."Amount") AS "TotalAmount",
+            CREATE VIEW vw_personal_weekly_expense_summary AS
+            SELECT
+                u."Id" AS "UserId",
+                (u."FirstName" || ' ' || u."LastName") AS "UserFullName",
+                COALESCE(DATE_TRUNC('week', e."RequestDate"), DATE_TRUNC('week', CURRENT_DATE)) AS "Week",
+                COUNT(e."Id") AS "ExpenseCount",
+                COALESCE(SUM(e."Amount"), 0) AS "TotalAmount",
                 COUNT(CASE WHEN e."Status" = 1 THEN 1 END) AS "ApprovedCount",
                 COUNT(CASE WHEN e."Status" = 2 THEN 1 END) AS "RejectedCount"
-            FROM "ExpenseRequests" e
-            JOIN "Users" u ON e."UserId" = u."Id"
-            GROUP BY 1, 2, 3
-            ORDER BY "Week" DESC;
+            FROM
+                "Users" u
+            JOIN
+                "ExpenseRequests" e ON u."Id" = e."UserId"
+            GROUP BY
+                u."Id", u."FirstName", u."LastName", COALESCE(DATE_TRUNC('week', e."RequestDate"), DATE_TRUNC('week', CURRENT_DATE))
+            ORDER BY
+                "Week" DESC, "TotalAmount" DESC;
             """,
 
             // Personel Bazlı Aylık Rapor
             """
-            CREATE OR REPLACE VIEW vw_personal_monthly_expense_summary AS
+            CREATE VIEW vw_personal_monthly_expense_summary AS
             SELECT 
                 e."UserId",
                 u."FirstName" || ' ' || u."LastName" AS "UserFullName",
-                TO_CHAR(e."RequestDate", 'YYYY-MM') AS "Month",
+                TO_CHAR(COALESCE(e."RequestDate", CURRENT_DATE), 'YYYY-MM') AS "Month",
                 COUNT(*) AS "ExpenseCount",
-                SUM(e."Amount") AS "TotalAmount",
+                COALESCE(SUM(e."Amount"), 0) AS "TotalAmount",
                 COUNT(CASE WHEN e."Status" = 1 THEN 1 END) AS "ApprovedCount",
                 COUNT(CASE WHEN e."Status" = 2 THEN 1 END) AS "RejectedCount"
             FROM "ExpenseRequests" e
             JOIN "Users" u ON e."UserId" = u."Id"
-            GROUP BY 1, 2, 3
+            GROUP BY 1, 2, TO_CHAR(COALESCE(e."RequestDate", CURRENT_DATE), 'YYYY-MM')
             ORDER BY "Month" DESC;
             """,
 
             // Kategori Dağılımı
             """
-            CREATE OR REPLACE VIEW vw_categorydistribution AS
+            CREATE VIEW vw_categorydistribution AS
             SELECT 
                 c."Name" AS "CategoryName",
                 SUM(e."Amount") AS "TotalAmount"
@@ -123,7 +152,7 @@ public static class DbInitializer
 
             // En Çok Harcayanlar
             """
-            CREATE OR REPLACE VIEW vw_topspenders AS
+            CREATE VIEW vw_topspenders AS
             SELECT 
                 u."FirstName" || ' ' || u."LastName" AS "UserFullName",
                 SUM(e."Amount") AS "TotalSpent",
@@ -137,7 +166,7 @@ public static class DbInitializer
 
             // Günlük Ortalama Harcamalar
             """
-            CREATE OR REPLACE VIEW vw_dailyaverageexpense AS
+            CREATE VIEW vw_dailyaverageexpense AS
             SELECT 
                 DATE("RequestDate") AS "Date",
                 AVG(e."Amount") AS "AverageAmount"
@@ -163,7 +192,7 @@ public static class DbInitializer
             var users = new List<User>
             {
                 new() { FirstName = "Admin", LastName = "User", Email = "admin@paparago.com", PasswordHash = "123456", IBAN = "TR000000000000000000000001", Role = UserRole.Admin },
-                new() { FirstName = "Ali", LastName = "Personel", Email = "ali@paparago.com", PasswordHash = "123456", IBAN = "TR000000000000000000000002", Role = UserRole.Personel },
+                new() { FirstName = "Deniz", LastName = "Personel", Email = "deniz@paparago.com", PasswordHash = "123456", IBAN = "TR00000000000000000000033", Role = UserRole.Personel },
                 new() { FirstName = "Veli", LastName = "Personel", Email = "veli@paparago.com", PasswordHash = "123456", IBAN = "TR000000000000000000000003", Role = UserRole.Personel },
                 new() { FirstName = "Ayşe", LastName = "Personel", Email = "ayse@paparago.com", PasswordHash = "123456", IBAN = "TR000000000000000000000004", Role = UserRole.Personel }
             };

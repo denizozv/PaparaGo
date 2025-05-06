@@ -40,20 +40,24 @@ public class ReportService : IReportService
     }
 
     // Personel günlük raporu
-    public async Task<IEnumerable<PersonalDailyExpenseSummaryDto>> GetPersonalDailyExpensesAsync(Guid userId)
+    public async Task<IEnumerable<PersonalDailyExpenseSummaryDto>> GetPersonalDailyExpensesAsync(Guid userId, DateTime date)
     {
-        const string sql = "SELECT * FROM vw_personal_daily_expense_summary WHERE \"UserId\" = @UserId";
+        const string sql = @"
+        SELECT * 
+        FROM vw_personal_daily_expense_summary 
+        WHERE ""UserId"" = @UserId AND DATE(""Date"") = @Date";
+
         using var connection = GetConnection();
-        return (await connection.QueryAsync<PersonalDailyExpenseSummaryDto>(sql, new { UserId = userId })).ToList();
+
+        var results = await connection.QueryAsync<PersonalDailyExpenseSummaryDto>(
+            sql,
+            new { UserId = userId, Date = date.Date } // sadece tarih kısmını alıyoruz
+        );
+
+        return results.ToList();
     }
 
-    // Personel haftalık raporu
-    public async Task<IEnumerable<PersonalWeeklyExpenseSummaryDto>> GetPersonalWeeklyExpensesAsync(Guid userId)
-    {
-        const string sql = "SELECT * FROM vw_personal_weekly_expense_summary WHERE \"UserId\" = @UserId";
-        using var connection = GetConnection();
-        return (await connection.QueryAsync<PersonalWeeklyExpenseSummaryDto>(sql, new { UserId = userId })).ToList();
-    }
+
 
     // Personel aylık raporu
     public async Task<IEnumerable<PersonalMonthlyExpenseSummaryDto>> GetPersonalMonthlyExpensesAsync(Guid userId)
@@ -85,4 +89,26 @@ public class ReportService : IReportService
         using var connection = GetConnection();
         return (await connection.QueryAsync<DailyAverageExpenseDto>(sql)).ToList();
     }
+
+    public async Task<IEnumerable<PersonalWeeklyExpenseSummaryDto>> GetPersonalWeeklyExpensesAsync(Guid userId, DateTime date)
+{
+    var startDate = DateTime.UtcNow.AddDays(-7);  // Bugünden 7 gün öncesi
+    
+        const string sql = @"
+            SELECT * FROM
+                    vw_personal_weekly_expense_summary
+                WHERE
+                    ""UserId"" = @UserId AND ""Date"" >= @StartDate
+                GROUP BY
+                    ""UserId"", ""UserFullName""
+                ";
+    
+    using var connection = GetConnection();
+    var results = await connection.QueryAsync<PersonalWeeklyExpenseSummaryDto>(
+        sql,
+        new { UserId = userId, StartDate = startDate.Date }
+    );
+    
+    return results.ToList();
+}
 }

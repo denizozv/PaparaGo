@@ -71,33 +71,26 @@ public class ExpenseController : ControllerBase
 
     [HttpGet("personel/daily")]
     [Authorize(Roles = "Personel")]
-    public async Task<IActionResult> GetDailyExpenses()
+    public async Task<IActionResult> GetDailyExpenses([FromQuery] DateTime date)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userId is null)
+        var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
             return Unauthorized("Token geçersiz.");
 
-        var all = await _reportService.GetPersonalDailyExpensesAsync(Guid.Parse(userId));
-        var today = DateTime.Today;
-        var filtered = all.Where(x => x.Date.Date == today).ToList();
-        return Ok(filtered);
+        var result = await _reportService.GetPersonalDailyExpensesAsync(userId, date);
+        return Ok(result);
     }
 
     [HttpGet("personel/weekly")]
     [Authorize(Roles = "Personel")]
-    public async Task<IActionResult> GetWeeklyExpenses()
+    public async Task<IActionResult> GetWeeklyExpenses([FromQuery] DateTime date)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userId is null)
-            return Unauthorized("Token geçersiz.");
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier); // Kullanıcının ID'sini alıyoruz
+            if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out var userId))
+                return Unauthorized("Token geçersiz.");
 
-        var all = await _reportService.GetPersonalWeeklyExpensesAsync(Guid.Parse(userId));
-        
-        var sevenDaysAgo = DateTime.Today.Subtract(TimeSpan.FromDays(7));
-
-        var filtered = all.Where(x => x.Date >= sevenDaysAgo && x.Date < DateTime.Today).ToList();
-
-        return Ok(filtered);
+            var result = await _reportService.GetPersonalWeeklyExpensesAsync(userId, date);
+            return Ok(result);
     }
 
     [HttpGet("personel/monthly")]
@@ -109,11 +102,16 @@ public class ExpenseController : ControllerBase
             return Unauthorized("Token geçersiz.");
 
         var all = await _reportService.GetPersonalMonthlyExpensesAsync(Guid.Parse(userId));
-        var today = DateTime.Today;
-        var firstOfMonth = new DateTime(today.Year, today.Month, 1);
-        var firstOfNextMonth = firstOfMonth.AddMonths(1);
 
-        var filtered = all.Where(x => x.Date >= firstOfMonth && x.Date < firstOfNextMonth).ToList();
+        var today = DateTime.Today;
+        var startOfMonth = new DateTime(today.Year, today.Month, 1);
+        var endOfMonth = startOfMonth.AddMonths(1);
+
+
+        var filtered = all
+            .Where(x => x.Month >= startOfMonth && x.Month < endOfMonth)
+            .ToList();
+
         return Ok(filtered);
     }
 

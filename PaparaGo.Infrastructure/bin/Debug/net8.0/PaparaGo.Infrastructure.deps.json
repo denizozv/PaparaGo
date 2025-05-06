@@ -745,10 +745,7 @@
       "System.Threading.Channels/7.0.0": {},
       "PaparaGo.Domain/1.0.0": {
         "runtime": {
-          "PaparaGo.Domain.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "PaparaGo.Domain.dll": {}
         }
       }
     }
